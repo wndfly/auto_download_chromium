@@ -58,7 +58,7 @@ if __name__ == '__main__':
             file_name = 'chrome-linux.zip'
         
         if system_ver == 'Mac':
-            file_name = 'chrom-mac.zip'
+            file_name = 'chrome-mac.zip'
         
         url_download = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/%s/%s/%s' % (system_ver, build_code, file_name)
 
