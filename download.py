@@ -3,10 +3,15 @@
 
 __author__ = 'wm'
 
+'''
+download latest chromium
+'''
+
 import urllib2
 import urllib
 import sys
 import os
+import platform
 
 def reporthook(*a):
     #os.system('cls')
@@ -26,30 +31,56 @@ def reporthook(*a):
         sys.stdout.write('\n')
 
 if __name__ == '__main__':
-    url = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/Win/LAST_CHANGE'
 
-    req = urllib2.urlopen(url)
+    system_info = platform.system()
 
-    build_code = req.read()
+    system_name_list = {
+        'Linux' : 'Linux',
+        'Windows' : 'Win',
+        'Darwin' : 'Mac'
+    }
 
-    url2 = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/Win/%s/chrome-win32.zip' % build_code
+    try:
+        system_ver = system_name_list[system_info]
+    except Exception:
+        system_ver = ''
 
-    #req2 = urllib2.urlopen(url2)
+    if system_ver:
+        url_build_code = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/%s/LAST_CHANGE' % system_ver
 
-    #dir_root = os.getcwd()
-    #build_dir = os.path.join(dir_root, build_code)
+        req = urllib2.urlopen(url_build_code)
 
-    #os.mkdir(build_dir)
-    #os.chdir(build_dir)
+        build_code = req.read()
+        
+        file_name = 'chrome-win32.zip'
 
-    #fHandle = open('chrome-win32.zip', 'wb')
+        if system_ver == 'Linux':
+            file_name = 'chrome-linux.zip'
+        
+        if system_ver == 'Mac':
+            file_name = 'chrom-mac.zip'
+        
+        url_download = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/%s/%s/%s' % (system_ver, build_code, file_name)
 
-    #fHandle.write(req2.read())
+        #req2 = urllib2.urlopen(url2)
 
-    #fHandle.close()
+        #dir_root = os.getcwd()
+        #build_dir = os.path.join(dir_root, build_code)
 
-    print 'Start Download Latest Chromium.'
+        #os.mkdir(build_dir)
+        #os.chdir(build_dir)
 
-    urllib.urlretrieve(url2, 'chrome-win32.zip',reporthook)
+        #fHandle = open('chrome-win32.zip', 'wb')
 
-    print 'Completed Download.'
+        #fHandle.write(req2.read())
+
+        #fHandle.close()
+
+        print 'Start Download Latest Chromium.'
+
+        urllib.urlretrieve(url_download, file_name, reporthook)
+
+        print 'Completed Download.'
+
+    else:
+        print 'Not match chromium with this system!'
