@@ -1,86 +1,95 @@
 #!/usr/bin/env/python
 #coding=utf-8
 
+"""
+download latest chromium
+"""
+
+from __future__ import unicode_literals
+
 __author__ = 'wm'
 
-'''
-download latest chromium
-'''
+try:
+    import urllib2 as url_request
+except ImportError:
+    from urllib import request as url_request
 
-import urllib2
-import urllib
+try:
+    from urllib import urlretrieve as url_retrieve
+except ImportError:
+    from urllib.request import urlretrieve as url_retrieve
+
 import sys
-import os
 import platform
 
+DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots'
+
+SYSTEM_NAME_LIST = {
+    'Linux': 'Linux',
+    'Windows': 'Win',
+    'Darwin': 'Mac'
+}
+
+
 def reporthook(*a):
-    #os.system('cls')
-    #print 'Download process: ' + str(int(float(a[0]) * float(a[1]) / float(a[2]) * 100)) + '%.'
+    """
+    download progress bar.
+    """
     pro_value = int(float(a[0]) * float(a[1]) / float(a[2]) * 100)
 
-    pro_str = '=' * (pro_value / 2)  + '.' * (50 - pro_value / 2)
+    pro_str = '=' * (pro_value / 2) + '.' * (50 - pro_value / 2)
 
     if pro_value / 2 < 100:
         pro_str = pro_str.replace('=.', '>.')
 
-    #sys.stdout.write('Download process: ' + str(pro_value) + '%.\r')
     sys.stdout.write('[' + pro_str + '] ' + str(pro_value) + '%.\r')
     sys.stdout.flush()
 
     if pro_value >= 100:
         sys.stdout.write('\n')
 
-if __name__ == '__main__':
 
+def get_system_ver():
     system_info = platform.system()
 
-    system_name_list = {
-        'Linux' : 'Linux',
-        'Windows' : 'Win',
-        'Darwin' : 'Mac'
-    }
-
     try:
-        system_ver = system_name_list[system_info]
-    except Exception:
-        system_ver = ''
+        return SYSTEM_NAME_LIST[system_info]
+    except KeyError:
+        return ''
 
+
+def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']):
+    """
+    start download chromium.
+    """
     if system_ver:
-        url_build_code = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/%s/LAST_CHANGE' % system_ver
+        url_build_code = '%s/%s/LAST_CHANGE' % (DOWNLOAD_URL_PRE, system_ver)
 
-        req = urllib2.urlopen(url_build_code)
+        req = url_request.urlopen(url_build_code)
 
         build_code = req.read()
-        
+
         file_name = 'chrome-win32.zip'
 
         if system_ver == 'Linux':
             file_name = 'chrome-linux.zip'
-        
+
         if system_ver == 'Mac':
             file_name = 'chrome-mac.zip'
-        
-        url_download = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots/%s/%s/%s' % (system_ver, build_code, file_name)
 
-        #req2 = urllib2.urlopen(url2)
+        url_download = '%s/%s/%s/%s' % (DOWNLOAD_URL_PRE, system_ver, build_code, file_name)
 
-        #dir_root = os.getcwd()
-        #build_dir = os.path.join(dir_root, build_code)
+        print('Start Download Latest Chromium.')
 
-        #os.mkdir(build_dir)
-        #os.chdir(build_dir)
+        url_retrieve(url_download, file_name, reporthook)
 
-        #fHandle = open('chrome-win32.zip', 'wb')
-
-        #fHandle.write(req2.read())
-
-        #fHandle.close()
-
-        print 'Start Download Latest Chromium.'
-
-        urllib.urlretrieve(url_download, file_name, reporthook)
-
-        print 'Completed Download.'
+        print('Completed Download.')
 
     else:
-        print 'Not match chromium with this system!'
+        print('Not match chromium with this system!')
+
+if __name__ == '__main__':
+
+    system_ver = get_system_ver()
+
+    download_chromium(system_ver)
