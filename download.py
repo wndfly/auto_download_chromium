@@ -22,12 +22,22 @@ except ImportError:
 import sys
 import platform
 
-DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots'
+#DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots'
+DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-continuous'
 
 SYSTEM_NAME_LIST = {
-    'Linux': 'Linux',
-    'Windows': 'Win',
-    'Darwin': 'Mac'
+    'Linux': {
+        '32': 'Linux',
+        '64': 'Linux_x64'
+    },
+    'Windows': {
+        '32': 'Win',
+        '64': 'Win'
+    },
+    'Darwin': {
+        '32': 'Mac',
+        '64': 'Mac'
+    }
 }
 
 
@@ -51,14 +61,18 @@ def reporthook(*a):
 
 def get_system_ver():
     system_info = platform.system()
+    machine_info = platform.machine()
 
     try:
-        return SYSTEM_NAME_LIST[system_info]
+        if machine_info.find('64') == -1:
+            return SYSTEM_NAME_LIST[system_info]['32']
+        else:
+            return SYSTEM_NAME_LIST[system_info]['64']
     except KeyError:
         return ''
 
 
-def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']):
+def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']['32']):
     """
     start download chromium.
     """
@@ -69,13 +83,12 @@ def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']):
 
         build_code = req.read()
 
-        file_name = 'chrome-win32.zip'
-
-        if system_ver == 'Linux':
+        if system_ver.lower().find('linux') != -1:
             file_name = 'chrome-linux.zip'
-
-        if system_ver == 'Mac':
+        elif system_ver.lower().find('mac') != -1:
             file_name = 'chrome-mac.zip'
+        else:
+            file_name = 'chrome-win32.zip'
 
         url_download = '%s/%s/%s/%s' % (DOWNLOAD_URL_PRE, system_ver, build_code, file_name)
 
