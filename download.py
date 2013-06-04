@@ -47,7 +47,7 @@ def reporthook(*a):
     """
     pro_value = int(float(a[0]) * float(a[1]) / float(a[2]) * 100)
 
-    pro_str = '=' * (pro_value / 2) + '.' * (50 - pro_value / 2)
+    pro_str = '=' * int(pro_value / 2) + '.' * int(50 - pro_value / 2)
 
     if pro_value / 2 < 100:
         pro_str = pro_str.replace('=.', '>.')
@@ -81,7 +81,7 @@ def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']['32']):
 
         req = url_request.urlopen(url_build_code)
 
-        build_code = req.read()
+        build_code = req.read().decode('utf-8')
 
         if system_ver.lower().find('linux') != -1:
             file_name = 'chrome-linux.zip'
