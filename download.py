@@ -23,7 +23,7 @@ import sys
 import platform
 
 #DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots'
-DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-continuous'
+DOWNLOAD_URL_PRE = 'https://commondatastorage.googleapis.com/chromium-browser-continuous'
 
 SYSTEM_NAME_LIST = {
     'Linux': {
