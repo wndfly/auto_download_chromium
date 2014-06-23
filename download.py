@@ -32,7 +32,7 @@ SYSTEM_NAME_LIST = {
     },
     'Windows': {
         '32': 'Win',
-        '64': 'Win'
+        '64': 'Win_x64'
     },
     'Darwin': {
         '32': 'Mac',
