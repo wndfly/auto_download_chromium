@@ -59,12 +59,12 @@ def reporthook(*a):
         sys.stdout.write('\n')
 
 
-def get_system_ver():
+def get_system_ver(bit):
     system_info = platform.system()
     machine_info = platform.machine()
 
     try:
-        if machine_info.find('64') == -1:
+        if machine_info.find('64') == -1 or bit == '32':
             return SYSTEM_NAME_LIST[system_info]['32']
         else:
             return SYSTEM_NAME_LIST[system_info]['64']
@@ -102,7 +102,9 @@ def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']['32']):
         print('Not match chromium with this system!')
 
 if __name__ == '__main__':
-
-    system_ver = get_system_ver()
+    if len(sys.argv) >= 2:
+        system_ver = get_system_ver(sys.argv[1])
+    else:
+        system_ver = get_system_ver()
 
     download_chromium(system_ver)
