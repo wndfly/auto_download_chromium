@@ -59,7 +59,7 @@ def reporthook(*a):
         sys.stdout.write('\n')
 
 
-def get_system_ver(bit):
+def get_system_ver(bit=null):
     system_info = platform.system()
     machine_info = platform.machine()
 
