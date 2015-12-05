@@ -23,7 +23,8 @@ import sys
 import platform
 
 #DOWNLOAD_URL_PRE = 'http://commondatastorage.googleapis.com/chromium-browser-snapshots'
-DOWNLOAD_URL_PRE = 'https://commondatastorage.googleapis.com/chromium-browser-continuous'
+#DOWNLOAD_URL_PRE = 'https://commondatastorage.googleapis.com/chromium-browser-continuous'
+DOWNLOAD_URL_PRE = 'https://storage.googleapis.com/chromium-browser-continuous'
 
 SYSTEM_NAME_LIST = {
     'Linux': {
@@ -59,7 +60,7 @@ def reporthook(*a):
         sys.stdout.write('\n')
 
 
-def get_system_ver(bit=64):
+def get_system_ver(bit = 32):
     system_info = platform.system()
     machine_info = platform.machine()
 
