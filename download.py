@@ -95,7 +95,7 @@ def download_chromium(system_ver=SYSTEM_NAME_LIST['Windows']['32']):
 
         print('Start Download Latest Chromium.')
 
-        file_name = '%s(%s)' % (file_name, system_ver)
+        file_name = '%s(%s).zip' % (file_name.replace('.zip', ''), system_ver)
 
         url_retrieve(url_download, file_name, reporthook)
 
